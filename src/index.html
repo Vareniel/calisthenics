@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KALIS — Calisthenics Training System</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@300;400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">K<span>A</span>LIS</div>
+    <ul class="nav-links">
+      <li><button onclick="switchView('home')" class="active" id="nav-home">Home</button></li>
+      <li><button onclick="switchView('workout')" id="nav-workout">Program</button></li>
+      <li><button onclick="switchView('absen')" id="nav-absen">Absensi</button></li>
+    </ul>
+  </nav>
+
+  <!-- HOME VIEW -->
+  <div id="view-home" class="view active">
+    <section class="hero">
+      <div class="hero-bg-lines"></div>
+      <p class="hero-eyebrow">// Calisthenics Training System</p>
+      <h1 class="hero-title">
+        KALIS
+        <em>Master Your Body</em>
+      </h1>
+      <p class="hero-subtitle">Program latihan calisthenics terstruktur. Dari pemula hingga advanced — bangun kekuatan
+        sejati dengan beban tubuhmu sendiri.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="switchView('workout')">Mulai Latihan</button>
+        <button class="btn-secondary" onclick="switchView('absen')">Lihat Absensi</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number" id="stat-exercises">35</div>
+          <div class="stat-label">Exercises</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="stat-days">0</div>
+          <div class="stat-label">Hari Latihan</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="stat-streak">0</div>
+          <div class="stat-label">Streak</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Level Selector -->
+    <div class="level-selector">
+      <div class="section-label">Pilih Level</div>
+      <div class="level-cards">
+        <div class="level-card" onclick="selectLevel('Beginner')" id="card-Beginner">
+          <div class="level-number">01</div>
+          <div class="level-tag">Level — Dasar</div>
+          <div class="level-name">BEGINNER</div>
+          <div class="level-desc">Fondasi gerakan, 4 hari per minggu. Cocok untuk yang baru memulai atau kembali setelah
+            istirahat panjang.</div>
+        </div>
+        <div class="level-card" onclick="selectLevel('Intermediate')" id="card-Intermediate">
+          <div class="level-number">02</div>
+          <div class="level-tag">Level — Menengah</div>
+          <div class="level-name">INTERMEDIATE</div>
+          <div class="level-desc">Push/Pull/Legs split, 5 hari per minggu. Skill dasar seperti L-Sit dan Handstand mulai
+            dilatih.</div>
+        </div>
+        <div class="level-card" onclick="selectLevel('Advanced')" id="card-Advanced">
+          <div class="level-number">03</div>
+          <div class="level-tag">Level — Mahir</div>
+          <div class="level-name">ADVANCED</div>
+          <div class="level-desc">Muscle-Up, Planche, Front Lever. Untuk yang sudah solid di gerakan dasar dan siap
+            menantang batas.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKOUT VIEW -->
+  <div id="view-workout" class="view">
+    <div class="workout-header">
+      <div>
+        <div class="page-title">
+          PROGRAM
+          <small>Weekly Training Schedule</small>
+        </div>
+      </div>
+      <div class="level-switcher">
+        <button class="level-btn active" onclick="setWorkoutLevel('Beginner')" id="wb-Beginner">Beginner</button>
+        <button class="level-btn" onclick="setWorkoutLevel('Intermediate')" id="wb-Intermediate">Intermediate</button>
+        <button class="level-btn" onclick="setWorkoutLevel('Advanced')" id="wb-Advanced">Advanced</button>
+      </div>
+    </div>
+    <div class="workout-grid" id="workout-grid"></div>
+  </div>
+
+  <!-- ABSEN VIEW -->
+  <div id="view-absen" class="view">
+    <div class="absen-container">
+      <div class="month-header">
+        <div class="month-nav">
+          <button class="month-btn" onclick="prevMonth()">‹</button>
+          <div class="month-name" id="month-name">MARCH</div>
+          <button class="month-btn" onclick="nextMonth()">›</button>
+        </div>
+        <div class="absen-stats">
+          <div class="absen-stat">
+            <div class="absen-stat-num" id="total-days-stat">0</div>
+            <div class="absen-stat-label">Hari Hadir</div>
+          </div>
+          <div class="absen-stat">
+            <div class="absen-stat-num" id="month-streak-stat">0</div>
+            <div class="absen-stat-label">Streak</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calendar-grid" id="calendar-grid"></div>
+
+      <div class="streak-banner">
+        <div class="streak-fire">🔥</div>
+        <div class="streak-text">
+          <div class="streak-num" id="streak-display">0</div>
+          <div class="streak-desc">hari streak berturut-turut. Jangan patahkan!</div>
+        </div>
+        <button class="check-in-btn" onclick="checkIn()" id="checkin-btn">Check In Hari Ini</button>
+      </div>
+
+      <div class="log-section">
+        <div class="section-label">Log Latihan</div>
+        <div id="log-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKOUT MODAL -->
+  <div class="modal-overlay" id="workout-modal">
+    <div class="workout-modal">
+      <div class="modal-top">
+        <div>
+          <div class="modal-title" id="modal-title">MONDAY</div>
+          <div class="modal-subtitle" id="modal-subtitle">Upper Body · Beginner</div>
+        </div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+
+      <!-- XP Bar -->
+      <div class="xp-bar-wrap">
+        <div class="xp-header">
+          <div class="xp-level">LVL <span id="xp-level-num">1</span></div>
+          <div class="xp-points"><span id="xp-current">0</span> / <span id="xp-next">100</span> XP</div>
+        </div>
+        <div class="xp-bar">
+          <div class="xp-fill" id="xp-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Progress Rings -->
+      <div class="progress-section" id="mini-rings"></div>
+
+      <!-- Timer -->
+      <div class="timer-section">
+        <div class="timer-ring">
+          <svg viewBox="0 0 200 200">
+            <circle class="timer-track" cx="100" cy="100" r="88" />
+            <circle class="timer-progress" cx="100" cy="100" r="88" id="timer-circle" stroke-dasharray="553"
+              stroke-dashoffset="0" />
+          </svg>
+          <div class="timer-display">
+            <div class="timer-time" id="timer-display-text">00:00</div>
+            <div class="timer-label" id="timer-mode-label">TIMER</div>
+          </div>
+        </div>
+        <div class="timer-controls">
+          <button class="timer-btn primary" onclick="startTimer()" id="timer-start-btn">▶ Start</button>
+          <button class="timer-btn" onclick="resetTimer()">↺ Reset</button>
+          <button class="timer-btn danger" onclick="stopTimer()">■ Stop</button>
+        </div>
+        <div class="timer-presets">
+          <button class="preset-btn" onclick="setPreset(20)">20s</button>
+          <button class="preset-btn" onclick="setPreset(30)">30s</button>
+          <button class="preset-btn" onclick="setPreset(45)">45s</button>
+          <button class="preset-btn" onclick="setPreset(60)">1m</button>
+          <button class="preset-btn" onclick="setPreset(90)">90s</button>
+          <button class="preset-btn" onclick="setPreset(120)">2m</button>
+          <button class="preset-btn active" id="preset-rest" onclick="toggleRestTimer()">💤 Rest</button>
+        </div>
+      </div>
+
+      <!-- Exercise Tracker -->
+      <div class="exercise-tracker">
+        <div class="tracker-title">Exercise Tracker</div>
+        <div id="exercise-track-list"></div>
+      </div>
+
+      <!-- Mini Games -->
+      <div class="game-section">
+        <div class="tracker-title">Mini Games — Biar Semangat!</div>
+        <div class="game-tabs">
+          <button class="game-tab active" onclick="switchGame('reps')">Rep Counter</button>
+          <button class="game-tab" onclick="switchGame('quiz')">Quiz Calis</button>
+          <button class="game-tab" onclick="switchGame('challenge')">Challenge</button>
+        </div>
+
+        <!-- Rep Counter Game -->
+        <div class="game-panel active" id="game-reps">
+          <div class="rep-game">
+            <div class="combo-display" id="combo-text">COMBO x5!</div>
+            <div class="rep-counter-display" id="rep-counter" onclick="addRep()">0</div>
+            <div class="rep-target">Target: <span id="rep-target-num">10</span> reps</div>
+            <div class="rep-bar">
+              <div class="rep-fill" id="rep-fill" style="width:0%"></div>
+            </div>
+            <div style="display:flex;gap:12px">
+              <button class="timer-btn" onclick="setRepTarget()" style="font-size:0.65rem">Set Target</button>
+              <button class="timer-btn danger" onclick="resetReps()">Reset</button>
+            </div>
+            <p
+              style="font-family:var(--font-mono);font-size:0.62rem;color:var(--gray-500);text-align:center;letter-spacing:0.08em">
+              Tap angka untuk hitung rep. Capai target untuk dapat XP!</p>
+          </div>
+        </div>
+
+        <!-- Quiz -->
+        <div class="game-panel" id="game-quiz">
+          <div class="quiz-area">
+            <div class="quiz-question" id="quiz-q"></div>
+            <div class="quiz-options" id="quiz-opts"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+              <div class="quiz-score">Score: <span id="quiz-score">0</span></div>
+              <button class="timer-btn" onclick="nextQuiz()" id="quiz-next-btn" style="display:none">Next ›</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Challenge -->
+        <div class="game-panel" id="game-challenge">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div id="challenge-display"
+              style="font-family:var(--font-body);font-size:1.1rem;color:var(--paper);line-height:1.7;padding:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08)">
+            </div>
+            <div style="display:flex;gap:12px">
+              <button class="timer-btn primary" onclick="acceptChallenge()" id="accept-btn">Accept Challenge</button>
+              <button class="timer-btn" onclick="newChallenge()">New Challenge</button>
+            </div>
+            <div id="challenge-result"
+              style="font-family:var(--font-mono);font-size:0.68rem;color:var(--accent);letter-spacing:0.1em;display:none">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Complete Button -->
+      <div style="padding:24px 36px">
+        <button
+          style="width:100%;padding:16px;font-family:var(--font-display);font-size:1.6rem;letter-spacing:0.1em;background:var(--accent);color:var(--ink);border:none;cursor:pointer;transition:all 0.25s"
+          onmouseover="this.style.background='var(--white)'" onmouseout="this.style.background='var(--accent)'"
+          onclick="completeWorkout()">
+          SELESAI LATIHAN
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <script src="index.js">
+  </script>
+</body>
+
+</html>
